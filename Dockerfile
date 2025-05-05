@@ -1,26 +1,12 @@
-# Fase de build - usa imagem oficial com Maven e OpenJDK 17
-FROM maven:3.9.6-eclipse-temurin-17 AS build
-
-# Definir o diretório de trabalho dentro do container
+# Etapa de build
+FROM maven:3.9-eclipse-temurin-17 AS build
 WORKDIR /app
-
-# Copia o código do seu repositório para o container
 COPY . .
+RUN mvn clean install -DskipTests
 
-# Rodar o Maven para compilar o projeto e gerar o JAR
-RUN mvn clean package -DskipTests
-
-# Fase final - usa imagem mais leve do OpenJDK para rodar a aplicação
-FROM eclipse-temurin:17-jdk-alpine
-
-# Definir diretório de trabalho
+# Etapa de execução
+FROM eclipse-temurin:17-jdk
 WORKDIR /app
-
-# Copia o JAR gerado na fase de build
 COPY --from=build /app/target/*.jar app.jar
-
-# Expondo a porta 8080
 EXPOSE 8080
-
-# Comando para rodar o app quando o container for iniciado
 ENTRYPOINT ["java", "-jar", "app.jar"]
