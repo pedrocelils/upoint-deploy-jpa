@@ -37,17 +37,9 @@ public class EmpresaController {
         return ResponseEntity.ok(empresa);
     }
 
-
-   /* @GetMapping("/{id}")
-    public ResponseEntity<Empresa> buscarEmpresaPorId(@PathVariable String id) {
-        return empresaService.buscarEmpresaId(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarEmpresa(@PathVariable String id) {
         empresaService.deletarEmpresa(id);
         return ResponseEntity.noContent().build();
-    }*/
+    }
 }

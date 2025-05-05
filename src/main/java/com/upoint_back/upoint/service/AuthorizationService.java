@@ -76,7 +76,7 @@ public class AuthorizationService implements UserDetailsService {
         newUser.setEmail(dto.email());
         newUser.setTelefone(dto.telefone());
         newUser.setEmpresa(empresa);
-        newUser.setEndereco(endereco);
+        //newUser.setEndereco(endereco);
 
         // Salva o usuário
         userRepository.save(newUser);
@@ -86,6 +86,10 @@ public class AuthorizationService implements UserDetailsService {
 
     public long totalUsuarios() {
         return userRepository.count();
+    }
+
+    public void deletarUsuario(String id) {
+        userRepository.deleteById(id);
     }
 
 

@@ -22,24 +22,6 @@ public class EmpresaService {
         this.enderecoRepository = enderecoRepository;
     }
 
-    // Método para criar uma nova empresa usando apenas os IDs
-    /*public Empresa createEmpresa(EmpresaDTO empresaDTO) {
-        Optional<Endereco> enderecoOptional = enderecoRepository.findById(empresaDTO.getEndereco().getId());
-        if (enderecoOptional.isEmpty()) {
-            throw new RuntimeException("Endereço não encontrado com o ID fornecido.");
-        }
-
-        Empresa empresa = new Empresa();
-        empresa.setRazaoSocial(empresaDTO.getRazaoSocial());
-        empresa.setNomeFantasia(empresaDTO.getNomeFantasia());
-        empresa.setCnpj(empresaDTO.getCnpj());
-        empresa.setEmail(empresaDTO.getEmail());
-        empresa.setTelefone(empresaDTO.getTelefone());
-        empresa.setEndereco(enderecoOptional.get());
-
-        return empresaRepository.save(empresa);
-    }*/
-
     public Empresa createEmpresa(EmpresaDTO dto) {
         // Cria entidade Endereco
         Endereco endereco = new Endereco();
@@ -76,8 +58,10 @@ public class EmpresaService {
     public List<Empresa> buscarTodasEmpresas() {
         return empresaRepository.findAll();
     }
-   /* public Optional<Empresa> buscarEmpresaId(String id);
-    public void deletarEmpresa(String id);*/
 
+    public void deletarEmpresa(String id) {
+        empresaRepository.deleteById(id);
     }
+
+}
 

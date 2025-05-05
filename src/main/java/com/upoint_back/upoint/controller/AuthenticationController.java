@@ -69,5 +69,11 @@ public class AuthenticationController {
         }
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarUsuario(@PathVariable String id) {
+        service.deletarUsuario(id);
+        return ResponseEntity.noContent().build(); // HTTP 204
+    }
+
 
 }

@@ -36,28 +36,40 @@ public class SecurityConfigurations {
                 .and()
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()  // Permite POST em /auth/login
-                        .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()  // Permite POST em /auth/register
-                        .requestMatchers(HttpMethod.POST, "/empresa").permitAll()  // Permite POST em /empresa
-                        .requestMatchers(HttpMethod.POST, "/endereco").permitAll()  // Permite POST em /endereco
-                        .requestMatchers(HttpMethod.POST, "/registros").permitAll()  // Permite POST em /registros
-                        .requestMatchers(HttpMethod.GET, "/registros").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/registros/{id}").permitAll()// Permite GET em /registros
-                        .requestMatchers(HttpMethod.GET, "/empresa").permitAll()  // Permite GET em /empresa
-                        .requestMatchers(HttpMethod.GET, "/endereco").permitAll()  // Permite GET em /endereco
-                        .requestMatchers(HttpMethod.PUT, "/registros").permitAll()  // Permite PUT em /registros
-                        .requestMatchers(HttpMethod.PUT, "/empresa").permitAll()  // Permite PUT em /empresa
-                        .requestMatchers(HttpMethod.PUT, "/endereco").permitAll()  // Permite PUT em /endereco
-                        .requestMatchers(HttpMethod.DELETE, "/registros").permitAll()  // Permite DELETE em /registros
-                        .requestMatchers(HttpMethod.DELETE, "/empresa").permitAll()  // Permite DELETE em /empresa
-                        .requestMatchers(HttpMethod.DELETE, "/endereco").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/cliente").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/registros/historico").permitAll()
+                        // Auth
+                        .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
                         .requestMatchers(HttpMethod.GET, "/auth/funcionarios/count").permitAll()
+
+                        // Empresa
+                        .requestMatchers(HttpMethod.POST, "/empresa").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/empresa").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/empresa").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/empresa").permitAll()
+
+                        // Endereço
+                        .requestMatchers(HttpMethod.POST, "/endereco").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/endereco").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/endereco").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/endereco").permitAll()
+
+                        // Registros
+                        .requestMatchers(HttpMethod.POST, "/registros").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/registros").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/registros/{id}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/registros/historico").permitAll()
                         .requestMatchers(HttpMethod.GET, "/registros/count").permitAll()
-                        .anyRequest().authenticated()  // Exige autenticação
+                        .requestMatchers(HttpMethod.PUT, "/registros").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/registros").permitAll()
+
+                        // Funcionário (User)
+                        .requestMatchers(HttpMethod.POST, "/cliente").permitAll() // Você pode renomear "/cliente" para "/funcionarios" se desejar padronizar
+
+                        // Qualquer outra requisição exige autenticação
+                        .anyRequest().authenticated()
                 )
                 .build();
+
     }
 
     private CorsConfigurationSource corsConfigurationSource() {

@@ -32,17 +32,9 @@ public class  User implements UserDetails {
     private String email;
     private String telefone;
 
-    @OneToOne
-    @JoinColumn(name = "endereco_id")
-    private Endereco endereco;
-
     @ManyToOne
     @JoinColumn(name = "empresa_id")
     private Empresa empresa;
-
-    public void setEndereco(Endereco endereco) {
-        this.endereco = endereco;
-    }
 
     public User(String login, String password, UserRole role){
         this.login = login;
