@@ -1,0 +1,2 @@
+ALTER TABLE empresa
+    ALTER COLUMN id TYPE TEXT USING id::text;
