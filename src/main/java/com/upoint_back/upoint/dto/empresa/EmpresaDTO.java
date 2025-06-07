@@ -13,6 +13,8 @@ public class EmpresaDTO {
     private String cnpj;
     private String email;
     private String telefone;
+    private Long latitude;
+    private Long longitude;
     private EnderecoDTO endereco;
 
 }

@@ -43,6 +43,8 @@ public class EmpresaService {
         empresa.setCnpj(dto.getCnpj());
         empresa.setEmail(dto.getEmail());
         empresa.setTelefone(dto.getTelefone());
+        empresa.setLatitude(dto.getLatitude());
+        empresa.setLongitude(dto.getLongitude());
         empresa.setEndereco(enderecoSalvo);
 
         // Salva empresa com o endereço vinculado

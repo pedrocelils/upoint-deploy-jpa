@@ -9,6 +9,8 @@ public record FuncionarioRequestDTO(
         String nome,
         String email,
         String telefone,
+        String cargo,
+        String departamento,
         String empresaId,
 
         // Endereço

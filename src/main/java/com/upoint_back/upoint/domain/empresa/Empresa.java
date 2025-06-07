@@ -20,6 +20,8 @@ public class Empresa {
     private String cnpj;
     private String email;
     private String telefone;
+    private Long latitude;
+    private Long longitude;
     @ManyToOne
     @JoinColumn(name = "endereco_id")
     private Endereco endereco;

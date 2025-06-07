@@ -1,8 +1,8 @@
 package com.upoint_back.upoint.controller;
 
 import com.upoint_back.upoint.domain.registro.Registro;
+import com.upoint_back.upoint.dto.historico.HistoricoDTO;
 import com.upoint_back.upoint.dto.registro.RegistroDTO;
-import com.upoint_back.upoint.dto.usuario.RegisterDTO;
 import com.upoint_back.upoint.service.RegistroService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -32,14 +32,15 @@ public class RegistroController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Registro>> obterRegistrosUsuarioLogado() {
+    public ResponseEntity<List<HistoricoDTO>> obterRegistrosUsuarioLogado() {
         try {
-            List<Registro> registros = registroService.getAllRegistros();
+            List<HistoricoDTO> registros = registroService.getAllRegistros();
             return ResponseEntity.ok(registros);
         } catch (Exception e) {
             return ResponseEntity.status(500).body(null);
         }
     }
+
 
     @GetMapping("/count")
     public Map<String, Long> contarRegistross() {

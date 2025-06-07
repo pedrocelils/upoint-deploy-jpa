@@ -36,40 +36,49 @@ public class SecurityConfigurations {
                 .and()
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        // Auth
-                        .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
+                        // Rotas públicas (permitidas para todos)
+                        /*.requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/registros").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/registros/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/registros/count").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/registros/historico").permitAll()
                         .requestMatchers(HttpMethod.GET, "/auth/funcionarios/count").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/editar-registros/usuario/edit").permitAll()
+                        .requestMatchers(HttpMethod.PATCH, "/editar-registros/{id}").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/editar-registros/{id}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/empresa").permitAll()*/
 
-                        // Empresa
-                        .requestMatchers(HttpMethod.POST, "/empresa").permitAll()
+                        .requestMatchers("/auth/login").permitAll()
+                        .requestMatchers("/auth/register").permitAll()
+
+                        // Rotas protegidas, requerem autenticação
+                        .requestMatchers("/auth/funcionarios/count").permitAll()
+                        .requestMatchers("/auth/{id}").permitAll()
+                        .requestMatchers("/auth/busca").permitAll()
+
+                        .requestMatchers(HttpMethod.GET, "/editar-registros/usuario/edit").permitAll()
+                        .requestMatchers(HttpMethod.PATCH, "/editar-registros/{id}").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/editar-registros/{id}").permitAll()
+
+                        // Rotas autenticadas do EmpresaController
                         .requestMatchers(HttpMethod.GET, "/empresa").permitAll()
-                        .requestMatchers(HttpMethod.PUT, "/empresa").permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/empresa").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/empresa").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/empresa/*").permitAll()
 
-                        // Endereço
-                        .requestMatchers(HttpMethod.POST, "/endereco").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/endereco").permitAll()
-                        .requestMatchers(HttpMethod.PUT, "/endereco").permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/endereco").permitAll()
-
-                        // Registros
+                        // Rotas autenticadas do RegistroController
                         .requestMatchers(HttpMethod.POST, "/registros").permitAll()
                         .requestMatchers(HttpMethod.GET, "/registros").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/registros/{id}").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/registros/historico").permitAll()
                         .requestMatchers(HttpMethod.GET, "/registros/count").permitAll()
-                        .requestMatchers(HttpMethod.PUT, "/registros").permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/registros").permitAll()
 
-                        // Funcionário (User)
-                        .requestMatchers(HttpMethod.POST, "/cliente").permitAll() // Você pode renomear "/cliente" para "/funcionarios" se desejar padronizar
+                        .requestMatchers(HttpMethod.GET, "/relatorios/registros").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/relatorios/registroPorUsuario").permitAll()
 
-                        // Qualquer outra requisição exige autenticação
+
+                        // Todas as outras rotas exigem autenticação
                         .anyRequest().authenticated()
                 )
                 .build();
-
     }
 
     private CorsConfigurationSource corsConfigurationSource() {
@@ -90,8 +99,8 @@ public class SecurityConfigurations {
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("https://www.upoint.com.br", "http://localhost:8081/"));
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedOrigins(List.of("http://localhost:8081/", "http://localhost:3000"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
         source.registerCorsConfiguration("/**", config);

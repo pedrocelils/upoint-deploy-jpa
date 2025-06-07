@@ -1,6 +1,5 @@
 package com.upoint_back.upoint.domain.user;
 
-import com.upoint_back.upoint.domain.endereco.Endereco;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -31,6 +30,8 @@ public class  User implements UserDetails {
     private String nome;
     private String email;
     private String telefone;
+    private String cargo;
+    private String departamento;
 
     @ManyToOne
     @JoinColumn(name = "empresa_id")

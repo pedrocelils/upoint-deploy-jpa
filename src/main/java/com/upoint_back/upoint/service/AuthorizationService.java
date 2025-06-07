@@ -5,8 +5,11 @@ import com.upoint_back.upoint.domain.endereco.Endereco;
 import com.upoint_back.upoint.domain.user.User;
 import com.upoint_back.upoint.domain.user.UserRole;
 import com.upoint_back.upoint.dto.usuario.FuncionarioRequestDTO;
+import com.upoint_back.upoint.dto.usuario.FuncionarioSearchDTO;
+import com.upoint_back.upoint.dto.usuario.FuncionarioSearchMapper;
 import com.upoint_back.upoint.repository.EmpresaRepository;
 import com.upoint_back.upoint.repository.EnderecoRepository;
+import com.upoint_back.upoint.repository.FuncionarioRepository;
 import com.upoint_back.upoint.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,6 +20,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class AuthorizationService implements UserDetailsService {
 
@@ -24,6 +30,9 @@ public class AuthorizationService implements UserDetailsService {
     UserRepository userRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private FuncionarioRepository funcionarioRepository;
 
     @Autowired
     private EmpresaRepository empresaRepository;
@@ -75,6 +84,8 @@ public class AuthorizationService implements UserDetailsService {
         newUser.setNome(dto.nome());
         newUser.setEmail(dto.email());
         newUser.setTelefone(dto.telefone());
+        newUser.setCargo(dto.cargo());
+        newUser.setDepartamento(dto.departamento());
         newUser.setEmpresa(empresa);
         //newUser.setEndereco(endereco);
 
@@ -90,6 +101,14 @@ public class AuthorizationService implements UserDetailsService {
 
     public void deletarUsuario(String id) {
         userRepository.deleteById(id);
+    }
+
+    public List<FuncionarioSearchDTO> buscarPorNomeCpfEmail(String search) {
+        return funcionarioRepository
+                .findByNomeContainingIgnoreCaseOrCpfContainingOrEmailContainingAllIgnoreCase(search, search, search)
+                .stream()
+                .map(FuncionarioSearchMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
 

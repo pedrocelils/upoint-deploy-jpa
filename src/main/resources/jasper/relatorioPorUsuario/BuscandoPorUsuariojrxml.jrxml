@@ -1,0 +1,211 @@
+<!-- Created with Jaspersoft Studio version 7.0.3.final using JasperReports Library version 7.0.3-41034ca841d452f3305ba55b9042260aaa1ab5dd  -->
+<jasperReport name="BuscandoPorUsuariojrxml" language="java" columnCount="1" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7f84cd6f-e90b-4a1e-9b24-ae546ce3a6fe">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="New Data Adapter"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<property name="net.sf.jasperreports.print.create.bookmarks" value="true"/>
+	<parameter name="nomeUsuario" class="java.lang.String"/>
+	<parameter name="dataInicial" class="java.sql.Date"/>
+	<parameter name="dataFinal" class="java.sql.Date"/>
+	<query language="SQL"><![CDATA[SELECT 
+    u.nome AS nome,
+    u.cargo AS cargo,
+    DATE(r.data_registro) AS data,
+    
+    -- Captura os horários específicos
+    MIN(CASE WHEN r.registro = 'ENTRADA' THEN CAST(r.data_registro AS TIME) END) AS entrada,
+    MIN(CASE WHEN r.registro = 'SAIDA_INTERVALO' THEN CAST(r.data_registro AS TIME) END) AS intervalo,
+    MIN(CASE WHEN r.registro = 'RETORNO_INTERVALO' THEN CAST(r.data_registro AS TIME) END) AS retorno,
+    MIN(CASE WHEN r.registro = 'SAIDA' THEN CAST(r.data_registro AS TIME) END) AS saida,
+
+    -- Cálculo das horas extras
+    CASE 
+        WHEN (
+            COALESCE(EXTRACT(EPOCH FROM (
+                MIN(CASE WHEN r.registro = 'SAIDA_INTERVALO' THEN CAST(r.data_registro AS TIME) END) -
+                MIN(CASE WHEN r.registro = 'ENTRADA' THEN CAST(r.data_registro AS TIME) END)
+            )), 0) + 
+            COALESCE(EXTRACT(EPOCH FROM (
+                MIN(CASE WHEN r.registro = 'SAIDA' THEN CAST(r.data_registro AS TIME) END) - 
+                MIN(CASE WHEN r.registro = 'RETORNO_INTERVALO' THEN CAST(r.data_registro AS TIME) END)
+            )), 0)
+        ) / 3600.0 > 8 
+        THEN ROUND(
+            (
+                COALESCE(EXTRACT(EPOCH FROM (
+                    MIN(CASE WHEN r.registro = 'SAIDA_INTERVALO' THEN CAST(r.data_registro AS TIME) END) - 
+                    MIN(CASE WHEN r.registro = 'ENTRADA' THEN CAST(r.data_registro AS TIME) END)
+                )), 0) + 
+                COALESCE(EXTRACT(EPOCH FROM (
+                    MIN(CASE WHEN r.registro = 'SAIDA' THEN CAST(r.data_registro AS TIME) END) - 
+                    MIN(CASE WHEN r.registro = 'RETORNO_INTERVALO' THEN CAST(r.data_registro AS TIME) END)
+                )), 0)
+            ) / 3600.0 - 8, 2
+        )
+        ELSE 0
+    END AS hora_extra
+
+FROM 
+    users u
+JOIN 
+    registros r ON u.id = r.usuario_id
+WHERE 
+    r.data_registro BETWEEN $P{dataInicial} AND $P{dataFinal}
+    AND u.nome ILIKE '%' || $P{nomeUsuario} || '%'
+GROUP BY 
+    u.nome, u.cargo, DATE(r.data_registro)
+ORDER BY 
+    u.nome, DATE(r.data_registro);
+]]></query>
+	<field name="nome" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nome"/>
+		<property name="com.jaspersoft.studio.field.label" value="nome"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="users"/>
+	</field>
+	<field name="cargo" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="cargo"/>
+		<property name="com.jaspersoft.studio.field.label" value="cargo"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="users"/>
+	</field>
+	<field name="data" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.name" value="data"/>
+		<property name="com.jaspersoft.studio.field.label" value="data"/>
+	</field>
+	<field name="entrada" class="java.sql.Time">
+		<property name="com.jaspersoft.studio.field.name" value="entrada"/>
+		<property name="com.jaspersoft.studio.field.label" value="entrada"/>
+	</field>
+	<field name="intervalo" class="java.sql.Time">
+		<property name="com.jaspersoft.studio.field.name" value="intervalo"/>
+		<property name="com.jaspersoft.studio.field.label" value="intervalo"/>
+	</field>
+	<field name="retorno" class="java.sql.Time">
+		<property name="com.jaspersoft.studio.field.name" value="retorno"/>
+		<property name="com.jaspersoft.studio.field.label" value="retorno"/>
+	</field>
+	<field name="saida" class="java.sql.Time">
+		<property name="com.jaspersoft.studio.field.name" value="saida"/>
+		<property name="com.jaspersoft.studio.field.label" value="saida"/>
+	</field>
+	<field name="hora_extra" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="hora_extra"/>
+		<property name="com.jaspersoft.studio.field.label" value="hora_extra"/>
+	</field>
+	<variable name="hora_extra1" resetType="Page" calculation="Sum" class="java.math.BigDecimal">
+		<expression><![CDATA[$F{hora_extra}]]></expression>
+	</variable>
+	<background splitType="Stretch"/>
+	<title height="84" splitType="Stretch">
+		<element kind="staticText" uuid="d9eb7efa-bd16-4946-8375-0e7866f485b7" positionType="FixRelativeToBottom" x="230" y="19" width="420" height="47" fontSize="25.0" bold="true" hTextAlign="Center">
+			<text><![CDATA[Relatório Horas Extras
+]]></text>
+		</element>
+		<element kind="line" uuid="44c8a9e2-2c1d-430c-8c6c-418b23465361" x="-20" y="0" width="841" height="1" forecolor="#C9C9C9"/>
+		<element kind="line" uuid="d74ec3d0-30c2-48f3-a563-55806d7970f6" x="-20" y="78" width="841" height="1" forecolor="#C9C9C9"/>
+	</title>
+	<columnHeader height="36" splitType="Stretch">
+		<element kind="staticText" uuid="2a853a6a-3c38-4abd-9d85-154afac6a14d" x="0" y="5" width="80" height="20" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[Nome]]></text>
+			<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="fcada0e2-6bf0-4457-8062-6ff799a5c1bb"/>
+		</element>
+		<element kind="line" uuid="01f771b3-0d7d-47e5-9fc7-21314fc3ab12" x="-20" y="28" width="840" height="2" forecolor="#C9C9C9"/>
+		<element kind="staticText" uuid="a846001f-56dc-42d5-a576-50fa43589ff1" x="100" y="5" width="60" height="20" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[Data]]></text>
+			<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="992c4e6f-5b09-460a-babd-a2efd83580c2"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="staticText" uuid="018995dd-548b-4590-a381-811ebc3d92bb" x="180" y="5" width="80" height="20" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[Entrada]]></text>
+			<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="4b4f3918-045f-4615-ab63-a27d02c54fe7"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="staticText" uuid="046dfb59-c61f-4e73-91af-35047b8b3d39" x="280" y="5" width="80" height="20" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[Intervalo]]></text>
+			<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="44da4b5d-b653-4f89-9247-2db582f2ce6f"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="staticText" uuid="089b5d57-a6ae-40ad-8e32-c8cd57f3971f" x="380" y="5" width="80" height="20" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[Retorno]]></text>
+			<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="586c12c4-ef4f-43d1-a6f6-052baa91c3f8"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="staticText" uuid="ef26b654-dbff-4fc5-8c0e-0d64a2ae280d" x="590" y="5" width="80" height="20" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[Hora Extra]]></text>
+			<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a2e217cf-3b33-414c-b2b7-8eace1bb661a"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="staticText" uuid="69b5ec6a-1285-4f68-925d-c222e811aaaf" x="490" y="3" width="80" height="20" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[Saída]]></text>
+			<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="243d3fcc-3442-4737-98a9-b9aea3720da3"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+	</columnHeader>
+	<detail>
+		<band height="30" splitType="Stretch">
+			<element kind="textField" uuid="a38cc7c7-f3cd-43a2-b0fb-f41fd45ac7ab" x="0" y="6" width="80" height="14" hTextAlign="Center">
+				<expression><![CDATA[$F{nome}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ff812a20-3817-402a-a92b-d4df435ca80a"/>
+				<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			</element>
+			<element kind="textField" uuid="c1fdee5d-b0c7-46ec-841f-1096177e36d7" x="100" y="6" width="60" height="14" hTextAlign="Center">
+				<expression><![CDATA[$F{data}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="992c4e6f-5b09-460a-babd-a2efd83580c2"/>
+			</element>
+			<element kind="textField" uuid="ee76a977-8a0d-4196-ade8-52c78047f0c8" x="180" y="6" width="78" height="14" pattern="HH:mm:ss" hTextAlign="Center">
+				<expression><![CDATA[$F{entrada}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="4b4f3918-045f-4615-ab63-a27d02c54fe7"/>
+				<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			</element>
+			<element kind="textField" uuid="45ef41f6-230d-43e1-8230-31f4ff91db0b" x="280" y="6" width="80" height="20" pattern="HH:mm:ss" hTextAlign="Center">
+				<expression><![CDATA[$F{intervalo}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="207f72e0-97e7-4be1-a388-de6fd441fb6b"/>
+				<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			</element>
+			<element kind="textField" uuid="eb2b6890-2812-488e-ab16-122b44121d35" x="380" y="6" width="80" height="20" pattern="HH:mm:ss" hTextAlign="Center">
+				<expression><![CDATA[$F{retorno}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="dc593acf-0e08-4f04-bbbc-67f5c3d63468"/>
+				<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			</element>
+			<element kind="textField" uuid="5f010edd-f02c-43fc-98e1-e9da107f7533" x="590" y="6" width="80" height="20" linkType="None" linkTarget="Self" hTextAlign="Center">
+				<expression><![CDATA[$F{hora_extra}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a2e217cf-3b33-414c-b2b7-8eace1bb661a"/>
+				<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			</element>
+			<element kind="textField" uuid="a1ab5928-e2f7-4c69-885f-95428b9f2275" x="490" y="6" width="80" height="20" pattern="HH:mm:ss" hTextAlign="Center">
+				<expression><![CDATA[$F{saida}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="243d3fcc-3442-4737-98a9-b9aea3720da3"/>
+				<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				<property name="com.jaspersoft.studio.unit.y" value="px"/>
+			</element>
+		</band>
+	</detail>
+	<pageFooter height="42">
+		<element kind="textField" uuid="82e07b95-89e7-4d90-b8cf-0ba24f1eff2d" x="602" y="10" width="80" height="20" hTextAlign="Center">
+			<expression><![CDATA[$V{hora_extra1}]]></expression>
+		</element>
+		<element kind="textField" uuid="acfb0a27-c93a-4eb3-aa14-880da60cc8f1" x="518" y="10" width="80" height="20" bold="true" hTextAlign="Center">
+			<expression><![CDATA["Total Horas:"]]></expression>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+	</pageFooter>
+</jasperReport>

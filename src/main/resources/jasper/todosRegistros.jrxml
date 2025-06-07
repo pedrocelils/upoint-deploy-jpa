@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 9.0.0.final using JasperReports Library version 6.21.0-4f56c4f36cd19e17675219a9ac4692d5f0f13b06  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="horasextrasjrxml" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="57df6d2d-1ef4-4a2b-bb37-3c5154e80bcc">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="New Data Adapter"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT 
+    u.id AS usuario_id,
+    u.nome AS usuario_nome,
+    u.cpf AS usuario_cpf,
+    u.email AS usuario_email,
+    u.login AS usuario_login,
+    u.telefone AS usuario_telefone,
+    u.cargo AS usuario_cargo,
+    u.departamento AS usuario_departamento,
+    r.id AS registro_id,
+    r.data_registro,
+    r.registro
+FROM 
+    users u
+JOIN 
+    registros r ON u.id = r.usuario_id
+ORDER BY 
+    u.nome, r.data_registro;
+]]>
+	</queryString>
+	<field name="usuario_id" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="usuario_id"/>
+		<property name="com.jaspersoft.studio.field.label" value="usuario_id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="users"/>
+	</field>
+	<field name="usuario_nome" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="usuario_nome"/>
+		<property name="com.jaspersoft.studio.field.label" value="usuario_nome"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="users"/>
+	</field>
+	<field name="usuario_cpf" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="usuario_cpf"/>
+		<property name="com.jaspersoft.studio.field.label" value="usuario_cpf"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="users"/>
+	</field>
+	<field name="usuario_email" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="usuario_email"/>
+		<property name="com.jaspersoft.studio.field.label" value="usuario_email"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="users"/>
+	</field>
+	<field name="usuario_login" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="usuario_login"/>
+		<property name="com.jaspersoft.studio.field.label" value="usuario_login"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="users"/>
+	</field>
+	<field name="usuario_telefone" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="usuario_telefone"/>
+		<property name="com.jaspersoft.studio.field.label" value="usuario_telefone"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="users"/>
+	</field>
+	<field name="usuario_cargo" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="usuario_cargo"/>
+		<property name="com.jaspersoft.studio.field.label" value="usuario_cargo"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="users"/>
+	</field>
+	<field name="usuario_departamento" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="usuario_departamento"/>
+		<property name="com.jaspersoft.studio.field.label" value="usuario_departamento"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="users"/>
+	</field>
+	<field name="registro_id" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="registro_id"/>
+		<property name="com.jaspersoft.studio.field.label" value="registro_id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="registros"/>
+	</field>
+	<field name="data_registro" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="data_registro"/>
+		<property name="com.jaspersoft.studio.field.label" value="data_registro"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="registros"/>
+	</field>
+	<field name="registro" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="registro"/>
+		<property name="com.jaspersoft.studio.field.label" value="registro"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="registros"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="67" splitType="Stretch">
+			<line>
+				<reportElement x="-20" y="0" width="595" height="1" uuid="ceb23966-3b63-46af-834f-4f040b45addd"/>
+			</line>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" x="60" y="20" width="420" height="47" uuid="2fbeab4a-49bc-4e01-90c9-83e3c936ebbd"/>
+				<textElement textAlignment="Center">
+					<font size="25" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Relatório Histórico de Registros]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="39" splitType="Stretch">
+			<staticText>
+				<reportElement x="2" y="10" width="78" height="20" uuid="835dd19d-27f7-40f3-9b52-3ad44af8af10">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c8a9bda1-e9a8-4ee0-8fb6-9df563e8c518"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nome]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="84" y="10" width="90" height="20" uuid="d10c28f4-0946-41b0-8ce4-c08e12edccb2">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="28494f9c-07c8-4c39-9962-972682b89ef8"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cargo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="180" y="10" width="90" height="20" uuid="46bebfbe-7cca-465f-a54d-0cc62cb793f6">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c7850e80-b963-41cd-a4b2-e64e45e15ae1"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Departamento]]></text>
+			</staticText>
+			<line>
+				<reportElement x="-18" y="30" width="593" height="3" uuid="5bf22bae-1405-468e-8389-1addf7fde48d"/>
+			</line>
+			<staticText>
+				<reportElement x="282" y="12" width="80" height="14" uuid="7debed2f-68a2-4818-b4e5-7baed6841bc2">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="8b346c43-7144-4a21-b3b6-38199e5662dc"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Registro]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="390" y="14" width="86" height="16" uuid="29350856-90d6-4c71-a9e3-f8b4647f60b1">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="deb3233c-881e-47bb-80c3-872d86c5fb7d"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="46" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="10" width="80" height="20" uuid="a49fd5e1-51dd-464a-b93a-ecbf326caff9">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c8a9bda1-e9a8-4ee0-8fb6-9df563e8c518"/>
+				</reportElement>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{usuario_nome}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="90" y="10" width="80" height="20" uuid="78e23004-f0e9-4b00-ad20-2e605d7cc399">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="28494f9c-07c8-4c39-9962-972682b89ef8"/>
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{usuario_cargo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="180" y="10" width="90" height="20" uuid="d3ea5243-a10c-4e6c-bd04-7bca02292e81">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c7850e80-b963-41cd-a4b2-e64e45e15ae1"/>
+				</reportElement>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{usuario_departamento}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="280" y="9" width="100" height="22" uuid="1acf0b96-bdf7-4470-8391-c6468b45b1bf">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="8b346c43-7144-4a21-b3b6-38199e5662dc"/>
+				</reportElement>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{registro}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="390" y="16" width="90" height="14" uuid="8deb8227-9385-441f-acee-c1942d4124e9">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="deb3233c-881e-47bb-80c3-872d86c5fb7d"/>
+				</reportElement>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{data_registro}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

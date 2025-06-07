@@ -3,10 +3,7 @@ package com.upoint_back.upoint.controller;
 import com.upoint_back.upoint.domain.empresa.Empresa;
 import com.upoint_back.upoint.domain.endereco.Endereco;
 import com.upoint_back.upoint.domain.user.User;
-import com.upoint_back.upoint.dto.usuario.AuthenticationDTO;
-import com.upoint_back.upoint.dto.usuario.FuncionarioRequestDTO;
-import com.upoint_back.upoint.dto.usuario.LoginResponseDTO;
-import com.upoint_back.upoint.dto.usuario.RegisterDTO;
+import com.upoint_back.upoint.dto.usuario.*;
 import com.upoint_back.upoint.infraestructure.TokenService;
 import com.upoint_back.upoint.repository.EmpresaRepository;
 import com.upoint_back.upoint.repository.EnderecoRepository;
@@ -22,6 +19,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -75,5 +73,8 @@ public class AuthenticationController {
         return ResponseEntity.noContent().build(); // HTTP 204
     }
 
-
+    @GetMapping("/busca")
+    public List<FuncionarioSearchDTO> buscarFuncionarios(@RequestParam String search) {
+        return service.buscarPorNomeCpfEmail(search);
+    }
 }

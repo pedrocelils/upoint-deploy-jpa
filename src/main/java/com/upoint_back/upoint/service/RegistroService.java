@@ -3,6 +3,7 @@ package com.upoint_back.upoint.service;
 import com.upoint_back.upoint.domain.registro.Registro;
 import com.upoint_back.upoint.domain.registro.RegistroEnum;
 import com.upoint_back.upoint.domain.user.User;
+import com.upoint_back.upoint.dto.historico.HistoricoDTO;
 import com.upoint_back.upoint.repository.RegistroRepository;
 import com.upoint_back.upoint.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,9 +51,9 @@ public class RegistroService {
         return registroRepository.save(registro);
     }
 
-    public List<Registro> getAllRegistros() {
+    public List<HistoricoDTO> getAllRegistros() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String login = authentication.getName(); // Recupera o login do usuário logado
+        String login = authentication.getName();
 
         Optional<User> userOpt = Optional.ofNullable(userRepository.findByLogin(login));
         if (userOpt.isEmpty()) {
@@ -60,7 +61,15 @@ public class RegistroService {
         }
 
         User user = userOpt.get();
-        return registroRepository.findByUsuario(user); // Busca os registros relacionados ao usuário logado
+        List<Registro> registros = registroRepository.findByUsuario(user);
+
+        return registros.stream()
+                .map(r -> new HistoricoDTO(
+                        r.getRegistro(),
+                        r.getData_registro()
+
+                ))
+                .toList();
     }
 
     public long totalRegistros() {
