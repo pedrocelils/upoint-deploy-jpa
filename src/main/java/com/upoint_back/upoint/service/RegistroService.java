@@ -47,7 +47,7 @@ public class RegistroService {
         Registro registro = new Registro();
         registro.setUsuario(user);
         registro.setRegistro(RegistroEnum.valueOf(tipoRegistro));
-        registro.setData_registro(LocalDateTime.now(ZoneOffset.UTC));
+        registro.setData_registro(LocalDateTime.now(ZoneOffset.UTC).minusHours(3));
 
 
         return registroRepository.save(registro);
