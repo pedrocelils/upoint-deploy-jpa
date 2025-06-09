@@ -2,6 +2,7 @@ package com.upoint_back.upoint.domain.registro;
 
 import com.upoint_back.upoint.domain.user.User;
 import jakarta.persistence.*;
+import java.time.Instant;
 import lombok.*;
 
 import java.io.Serializable;
@@ -21,7 +22,7 @@ public class Registro implements Serializable {
     private String id;
     @Enumerated(EnumType.STRING)
     private RegistroEnum registro;
-    private LocalDateTime data_registro;
+    private Instant data_registro;
     @ManyToOne
     @JoinColumn(name = "usuario_id", nullable = false)
     private User usuario;
