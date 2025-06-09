@@ -22,7 +22,7 @@ public class Registro implements Serializable {
     private String id;
     @Enumerated(EnumType.STRING)
     private RegistroEnum registro;
-    private Instant data_registro;
+    private LocalDateTime data_registro;
     @ManyToOne
     @JoinColumn(name = "usuario_id", nullable = false)
     private User usuario;
