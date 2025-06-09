@@ -14,7 +14,7 @@ public class HistoricoDTO {
     private String registro;
 
 
-    public HistoricoDTO(RegistroEnum registro, Instant hora) {
+    public HistoricoDTO(RegistroEnum registro, LocalDateTime hora) {
         this.registro = registro.name();
         this.hora = hora.toString();
     }
