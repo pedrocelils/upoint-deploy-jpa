@@ -44,7 +44,7 @@ public class RegistroService {
 
         Registro registro = new Registro();
         registro.setUsuario(user);
-        registro.setRegistro(RegistroEnum.valueOf(tipoRegistro));
+        registro.setData_registro(LocalDateTime.from(Instant.now()));
         registro.setData_registro(Instant.now());
 
 
